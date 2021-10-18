@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load mathfilters%} <!--숫제연산쓰게 해주는거-->
+
+<div class="container mt-5">
+    <h1>Board</h1>
+    <div class ="text-end">
+        <a href="{% url 'board:create' %}">
+        <button type="button" class="btn btn-success">Write</button>
+        </a>
+    </div>
+    <table class="table mt-3 table-hover" >
+        <thead style = "background-color: #e9b2d7be">
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">Subject</th>
+            <th scope="col">Content</th>
+            <th scope="col">Writer</th>
+            <th scope="col">Up</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% if con %}
+                {%for i in con%}
+                <tr>
+                    <th scope="row">{{ con.number|sub:1|mul:10|add:forloop.counter }}</th>
+                    <td>
+                        <a href="{% url 'board:detail' i.id %}">{{i.subject}}</a>
+                        {%if i.reply_set.count %} <!--댓글수-->
+                            <sup style="color: #e9b2d7;">({{ i.reply_set.count}})</sup>
+                        {%endif%}
+                    </td>
+                    <td>{{i.summary}}</td>
+                    {% if user.username == i.writer %}
+                        <td><mark style = "background-color: #e9b2d7be">{{i.writer}}</mark></td>
+                    {% else %}
+                    <td>{{i.writer}}</td>
+                    {% endif %}
+                    <td>{{i.up.all.count }}</td> <!--i.up.all-> up한 유저 갖고옴 .count해야 숫자됨-->
+                 </tr>
+                {%endfor%}
+            {%else%}
+            <td colspan="5">No result</td>
+            {%endif%}
+        </tbody>
+    </table>
+
+<!--검색기능-->
+<form>
+    <div class="row mt-4 mb-5">
+        <div class="col-lg-2">
+            <select name="cate" class="form-select" aria-label="Default select example">
+                <option value="Subject" {% if cate == 'Subject' %} selected {%endif%}>Subject</option>
+                <option value="Writer" {% if cate == 'Writer' %} selected {%endif%}>Writer</option>
+                <option value="Content" {% if cate == 'Content' %} selected {%endif%}>Content</option>
+            </select>
+        </div>
+        <div class="col-lg-9">
+            <input type="text" value="{{kw}}" placeholder="검색어를 입력해주세요" name="kw" class="form-control" aria-describedby="emailHelp">
+        </div>
+        
+        <div class="col-lg-1">
+            <button type="submit" class="btn btn-outline-dark">검색</button>
+        </div>
+
+    </div>
+</form>
+
+
+
+
+    <!--페이지 나타내는 부분-->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if con.has_previous %} <!--전페이지 있다면 -->
+                <li class="page-item">
+                    <a class="page-link" href="{%url 'board:index' %}?page=1&kw={{kw}}&cate={{cate}}">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="{%url 'board:index' %}?page={{con.previous_page_number}}&kw={{kw}}&cate={{cate}}">Previous</a>
+                </li>
+            {%else%} <!--전페이지 없다면-->
+                <li class="page-item disabled">
+                    <a class="page-link" href="{% url 'board:index' %}?page=1&kw={{kw}}&cate={{cate}}">First</a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link">Previous</a>
+                </li>
+            {%endif%}
+            
+
+            {% for i in con.paginator.page_range %} <!--paginator에 생성된 전체 pg가 range 지원되서
+            포문의 i에 1부터 끝페이지까지 숫자가 들어가짐-->
+                
+                {% if i >= con.number|sub:1|intdiv:10|mul:10|add:1 and i <= con.number|sub:1|intdiv:10|mul:10|add:10 %} <!--해당페이지 앞뒤로 3개씩만 뜨게함-->
+            
+                    {% if i == con.number %} <!--페이지 수에 맞게 파란색뜨게 하는거-->
+                        <li class="page-item active"><a class="page-link" href="{% url 'board:index' %}?page={{i}}&kw={{kw}}&cate={{cate}}">{{i}}</a></li>
+                    {%else%}
+                        <li class="page-item"><a class="page-link" href="{%url 'board:index' %}?page={{i}}&kw={{kw}}&cate={{cate}}">{{i}}</a></li>
+                    {%endif%}
+            
+                {%endif%}
+            
+            {%endfor%}
+
+            {%if con.has_next%} <!--다음페이지 있다면-->
+                <li class="page-item">
+                    <a class="page-link" href="{%url 'board:index' %}?page={{con.next_page_number}}&kw={{kw}}&cate={{cate}}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="{%url 'board:index' %}?page={{con.paginator.num_pages}}&kw={{kw}}&cate={{cate}}">Last</a>
+                </li>
+            {%else%}
+                <li class="page-item disabled"> <!--다음페이지 없다면-->
+                    <a class="page-link"  href="#">Next</a>
+                </li>
+                <li class="page-item disabled"> 
+                    <a class="page-link"  href="{% url 'board:index' %}?page={{con.paginator.num_pages}}&kw={{kw}}&cate={{cate}}">Last</a>
+                </li>
+            {%endif%}
+        </ul>
+      </nav>
+
+
+</div>
+
+
+
+<style>
+    a {  
+        text-decoration: none;
+        color: black;
+    }
+
+    a:hover{
+        color: #e9b2d7;
+        font-weight:bold;
+    }
+</style>
+
+{% endblock %}

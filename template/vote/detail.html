@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content%}
+{%load mathfilters%}
+
+    <div class="container mb-5 mt-5">
+        <h1>{{con.subject}}</h1>
+        <div class="text-end">
+            <img src="{{con.writer_pic.url}}" class="rounded-circle" width="100">
+            <p>
+                writer {{con.writer}}
+            </p>
+        </div>     
+        <div class="mb-3 ">
+            <label class="form-label">Comment</label>
+            <textarea disabled class="form-control" >{{con.comment}}</textarea>
+        </div>
+    </div>
+
+    <hr>
+
+    <form method="POST" action="{% url 'vote:vote' con.id %}">
+        {%csrf_token%}
+        <div class="row">
+            {%for i in cho%}
+                <div class="col-lg-4 text-center">
+                    {%if not user in con.voter.all%} <!--투표안했다면-->
+                        <input class="form-check-input" type="radio" name="choice" value="{{i.id}}" id="flexRadioDefault1" {%if forloop.first%}checked{%endif%}>
+                    {%endif%}
+                    <img src="{{i.pic.url}}" class="rounded-circle" width="150">
+                    <h4>{{i.name}}</h4>
+                    <!--아래는 투표율나오는거-->
+                    {%if user in con.voter.all%} <!--투표했다면-->
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: {{ i.cuser.count|div:con.voter.count|mul:100 }}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{ i.cuser.count|div:con.voter.count|mul:100 }}%</div>
+                    </div>
+                    {%endif%}
+                </div>
+            {%endfor%}
+
+            {%if user in con.voter.all%} 
+                <a href="{%url 'vote:cancel' con.id%}"><button type="button" class="mt-3 btn btn-danger">CANCEL VOTE</button></a>
+            {%else%}
+                <button class="mt-3 btn btn-primary">VOTE</button>
+            {%endif%}
+        </div>
+    </form>
+
+
+{%endblock%}

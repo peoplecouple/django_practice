@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-5 mb-5">
+    <h1>Translator</h1>
+    <hr>
+
+    <form method="POST">
+        {%csrf_token%}
+        <div class="row mt-5">
+            <div class="col-lg-5">
+                <h4>Before</h4>          
+                <textarea name="before" placeholder="번역할 내용을 입력해주세요." class="form-control mt-3" style="font-size:20px; height:300px">{{before}}</textarea>
+                </div>   
+            <div class="col-lg-2 text-center" style="margin:auto">
+                <h4>From</h4>
+                <select name="from" class="form-select" size="3" aria-label="size 3 select example">
+                    <option value="ko" {% if from == 'ko' or not from %}selected{%endif%}>Korean</option>
+                    <option value="en" {% if from == 'en' %}selected{%endif%}>English</option>
+                    <option value="it" {% if from == 'it' %}selected{%endif%}>Italian</option>
+                    <option value="es" {% if from == 'es' %}selected{%endif%}>Spanish</option>
+                    <option value="la" {% if from == 'la' %}selected{%endif%}>Latin</option>
+                </select>
+
+                <button class="btn btn-secondary mt-3 mb-3">translate</button>
+                <h4>To</h4> 
+                <select name="to" class="form-select" size="3" aria-label="size 3 select example">
+                    <option value="ko" {% if to == 'ko' %}selected{%endif%}>Korean</option>
+                    <option value="en" {% if to == 'en' or not to %}selected{%endif%}>English</option>
+                    <option value="it" {% if to == 'it' %}selected{%endif%}>Italian</option>
+                    <option value="es" {% if to == 'es' %}selected{%endif%}>Spanish</option>
+                    <option value="la" {% if to == 'la' %}selected{%endif%}>Latin</option>
+                </select>                 
+            </div>
+            <div class="col-lg-5">
+                <h4>After</h4>
+                <textarea class="form-control mt-3" style="font-size:20px; height:300px" disabled>{{after}}</textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
+{%endblock%}

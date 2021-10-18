@@ -1,0 +1,25 @@
+{%extends 'base.html'%}
+{%block not_auth%}
+
+<div class="container mt-5">
+    <h1>Login </h1>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3 mt-5">
+            <label class="form-label">Username</label>
+            <input type="text" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+        </div>
+        
+        {% load socialaccount %}
+        {% providers_media_js %}
+        <a href="{% provider_login_url 'google' %}"><button type="button" class="btn btn-secondary">Google Login</button></a>
+
+        <button type="submit" class="btn btn-primary">LOGIN</button>
+    </form>
+
+</div>
+{%endblock%}

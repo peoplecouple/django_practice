@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block content%}
+{% load mathfilters%}
+
+
+<div class = "container mt-5 mb-3">
+    <!--당신이 참여한 Topic들
+    <p>
+        {% for i in user.topic_set.all%}
+            {{i}}
+        {% endfor %}
+    </p>-->
+    <div class="text-end">
+    <a href="{% url 'vote:create' %}"><button class="btn btn-success">Create Topic</button></a>
+    </div>
+
+    <div class="text-end">
+    <a href="{% url 'vote:create' %}"><button class="btn btn-primary">Not Voted</button></a>
+    </div>
+
+    
+    {%for i in con%}
+        <div class="card mb-4 mt-4">
+            <!--아래는 투표한지 안한지 -->
+            {% if user in i.voter.all %}
+                <div class="card-header" style="background-color: rgba(127, 225, 255, 0.788);">
+                    Voted
+                </div>
+            {%else%}
+                <div class="card-header" style="background-color: rgb(255, 192, 203);">
+                    Not Voted
+                </div>
+            {%endif%}
+
+            <div class="card-body">
+                <h5 class="card-title">{{i.subject}}</h5>
+                <p class="card-text">{{i.comment}}</p>
+                <a href="{% url 'vote:detail' i.id %}" class="btn btn-primary">Let's Vote!</a>
+            </div>
+        </div>
+    {%endfor%}
+<!--페이징-->
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        {% if con.has_previous %} <!--전페이지 있다면 -->
+            <li class="page-item">
+                <a class="page-link" href="{%url 'vote:index' %}?page=1">First</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="{%url 'vote:index' %}?page={{con.previous_page_number}}">Previous</a>
+            </li>
+        {%else%} <!--전페이지 없다면-->
+            <li class="page-item disabled">
+                <a class="page-link" href="{% url 'vote:index' %}?page=1">First</a>
+            </li>
+            <li class="page-item disabled">
+                <a class="page-link">Previous</a>
+            </li>
+        {%endif%}
+        
+
+        {% for i in con.paginator.page_range %} <!--paginator에 생성된 전체 pg가 range 지원되서
+        포문의 i에 1부터 끝페이지까지 숫자가 들어가짐-->
+            
+            {% if i >= con.number|sub:1|intdiv:2|mul:2|add:1 and i <= con.number|sub:1|intdiv:2|mul:2|add:2 %} <!--해당페이지 앞뒤로 3개씩만 뜨게함-->
+        
+                {% if i == con.number %} <!--페이지 수에 맞게 파란색뜨게 하는거-->
+                    <li class="page-item active"><a class="page-link" href="{% url 'vote:index' %}?page={{i}}">{{i}}</a></li>
+                {%else%}
+                    <li class="page-item"><a class="page-link" href="{%url 'vote:index' %}?page={{i}}">{{i}}</a></li>
+                {%endif%}
+        
+            {%endif%}
+        
+        {%endfor%}
+
+        {%if con.has_next%} <!--다음페이지 있다면-->
+            <li class="page-item">
+                <a class="page-link" href="{%url 'vote:index' %}?page={{con.next_page_number}}">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="{%url 'vote:index' %}?page={{con.paginator.num_pages}}">Last</a>
+            </li>
+        {%else%}
+            <li class="page-item disabled"> <!--다음페이지 없다면-->
+                <a class="page-link"  href="#">Next</a>
+            </li>
+            <li class="page-item disabled"> 
+                <a class="page-link"  href="{% url 'vote:index' %}?page={{con.paginator.num_pages}}}">Last</a>
+            </li>
+        {%endif%}
+    </ul>
+  </nav>
+
+</div>
+
+
+{%endblock%}

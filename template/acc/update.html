@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{%block content%}
+<div class="container mt-5">
+    <h1>정보 수정</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3 mt-5">
+            <label class="form-label">Username</label>
+            <input type="text" name="username" value="{{user.username}}" disabled class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+        </div>
+        
+        <div class="mb-3 ">
+            <label class="form-label">Nickname</label>
+            <input type="text" name="nickname" value="{{user.nickname}}"class="form-control" id="exampleInputPassword1">
+        </div>
+
+        <div class="mb-3 ">
+            <label class="form-label">Comment</label>
+            <textarea name="comment" class="form-control" >{{user.comment}}</textarea>
+        </div>
+
+        <div class="mb-3 ">
+            <label class="form-label">Picture</label>
+            <input type="file" name="userpic" class="form-control" id="exampleInputPassword1">
+        </div>
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">정보 수정</button>
+        </div>
+    </form>
+
+</div>
+
+
+{%endblock%}

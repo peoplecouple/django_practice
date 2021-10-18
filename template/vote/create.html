@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content%}
+<form method="POST" enctype="multipart/form-data">
+    {%csrf_token%}
+    <div class="container mb-5 mt-5">
+        <h1>Create Topic!</h1>
+        <div class="mb-3 mt-5">
+            <label class="form-label">Subject</label>
+            <input name="subject" type="text" class="form-control">
+        </div> 
+        <div class="mb-3 ">
+            <label class="form-label">Writer</label>
+            <input type="text" class="form-control" disabled value="{{user.username}}">
+        </div>  
+        <div class="mb-3 ">
+            <label class="form-label">Comment</label>   
+            <textarea name="comment" class="form-control" ></textarea>
+        </div>
+
+        <hr>
+
+        <button type="button" onclick=create_choice() class="btn btn-success">보기생성</button>
+        <div id="choices">
+
+        </div>
+
+        <button class="mt-5 mb-5 btn btn-primary">CREATE</button>
+
+    </div>
+</form>
+<script>
+    function create_choice(){
+        c = document.getElementById("choices");
+        div = document.createElement("div");
+        div.innerHTML = '<hr><p>보기이름 <input class="form-control" type="text" name="name" placeholder="보기를 입력해주세요."></p><p>이미지 <input class="form-control" type="file" name="pic"></p><hr>';
+        c.appendChild(div);
+        }
+</script>
+
+{%endblock%}
+

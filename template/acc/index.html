@@ -1,0 +1,7 @@
+
+{% if user.is_authenticated %}
+    {{ user.username }}님 환영합니다.
+{% else %}
+    로그인해주세요
+{% endif %}
+

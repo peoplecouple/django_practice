@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+    <title>성아의 홈페이지</title>
+</head>
+<body>
+
+    {% if user.is_authenticated %}
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e9b2d7be">
+        <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'acc:index' %}">HOME</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'board:index' %}">BOARD</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'vote:index' %}">VOTE</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'translator:index' %}">TRANSLATOR</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'ocr:index' %}">OCR</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'quiz:index' %}">QUIZ</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'pdf:index' %}">PDF READER</a>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ user.username }}님
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{% url 'acc:user_profile' %}">PROFILE</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'acc:user_logout' %}">LOGOUT</a></li>
+                </ul>
+            </li>
+            </ul>
+        </div>
+        </div>
+    </nav>
+    {%for i in messages%}
+        <div class="alert {{i.tags}} alert-dismissible fade show" role="alert">
+            <strong>{{i.tags}}</strong> {{i.message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {%endfor%}
+
+
+    {% block content %}
+    {% endblock %}
+
+
+    {%else%}
+    <nav class="navbar navbar-expand-lg navbar-light"  style="background-color: #e9b2d7be">
+        <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'acc:index' %}">HOME</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'acc:user_login' %}">LOGIN</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'acc:user_signup' %}">SIGN UP</a>
+                </li>
+            </ul>
+        </div>
+        </div>
+    </nav>
+    {%for i in messages%}
+        <div class="alert {{i.tags}} alert-dismissible fade show" role="alert">
+            <strong>{{i.tags}}</strong> {{i.message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {%endfor%}
+
+    {% block not_auth %}
+    {% endblock %}
+
+    {%endif%}
+
+    
+    <style>
+        .error{
+            background-color: rgba(220, 20, 60, 0.534);
+        }
+        .success{
+            background-color: rgba(0, 0, 255, 0.637);
+        }
+        .warning{
+            background-color: rgba(255, 255, 0, 0.5);
+        }
+        .info{
+            background-color: rgba(0, 128, 0, 0.541);
+        }
+    </style>
+        
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script> 
+</body>
+</html>

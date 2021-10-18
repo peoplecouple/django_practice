@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="container mt-5 mb-5">
+
+    <h1>OCR Tech</h1>
+    <hr>
+    <h5 class="mt-5">추출할 이미지를 넣어주세요</h5>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="pic" class="mt-3 form-control">
+
+        <div class="row mt-5">
+            <div class="col-lg-10">
+                <select class="form-select" name="nat">
+                    <option value="kor" {% if nat == "kor" %}selected{% endif %}>Korean</option>
+                    <option value="eng" {% if nat == "eng" %}selected{% endif %}>English</option>
+                    <option value="chi_sim" {% if nat == "chi_sim" %}selected{% endif %}>Chinese</option>
+                    <option value="jpn" {% if nat == "jpn" %}selected{% endif %}>Japenese</option>
+                    <option value="vie" {% if nat == "vie" %}selected{% endif %}>Vietnamese</option>
+                </select>
+            </div>
+            <div class="col-lg-2" style="margin: auto;">
+                <button class="btn btn-primary">Extract</button>
+            </div>
+        </div>
+    </form>
+    
+    <form method="POST" action="{% url 'translator:index' %}">
+        {% csrf_token %} 
+        <textarea name="before" class="mt-5 form-control" style="height: 300px;">{{con}}</textarea>
+        <button class="mt-4 btn btn-secondary">Trans to KOREAN</button>
+    </form>
+   
+
+</div>
+
+
+
+
+{% endblock %}

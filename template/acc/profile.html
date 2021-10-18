@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{%block content%}
+<div class="container mt-5">
+    <h1>Information</h1>
+    <div class="text-center">
+        <img src="{{user.userpic.url}}" class="rounded-circle" width="200">
+    </div>
+    <div class="mb-3 mt-5">
+        <label class="form-label">Username</label>
+        <input type="text" value="{{user.username}}" disabled class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    </div>
+       
+    <div class="mb-3 ">
+        <label class="form-label">Comment</label>
+        <textarea disabled class="form-control" >{{user.comment}}</textarea>
+    </div>
+
+    <div class="mb-3 ">
+        <label class="form-label">Point</label>
+        <input type="text" value="{{user.point}} P" disabled class="form-control" id="exampleInputPassword1">
+    </div>
+
+    <div class="text-end">
+        <a href="{% url 'acc:update' %}"><button type="submit" class="btn btn-primary">정보수정</button></a>
+        
+    <!--모달-->
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            계정삭제
+        </button>
+        
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">계정 삭제 알림</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                정말 삭제하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">아니요</button>
+                <a href="{% url 'acc:delete' %}"><button type="button" class="btn btn-danger">예</button></a>
+                </div>
+            </div>
+            </div>
+        </div>
+    <!--모달-->
+    
+    </div>
+
+</div>
+
+
+{%endblock%}
